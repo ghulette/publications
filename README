@@ -1,3 +1,5 @@
-The file publications.bib is a BibTeX file containing a
-(reasonably) current list of Geoff Hulette's published research
-papers.
+The file publications.bib is a BibTeX file containing a (reasonably) current
+list of Geoff Hulette's published research papers.
+
+In the htmlify directory there is also a small Haskell program used to convert
+the BibTeX file to HTML for my homepage.
