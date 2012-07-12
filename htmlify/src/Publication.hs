@@ -69,7 +69,7 @@ parsePublications s = case parse (skippingLeadingSpace file) "BibTeX" s of
   Right bibs -> map bibToPub bibs
 
 fullStop :: String -> String
-fullStop = flip (++) "."
+fullStop = flip (++) ". "
 
 htmlTitle :: String -> Html
 htmlTitle = H.i . toHtml . fullStop

@@ -1,5 +1,5 @@
 import Publication
-import Text.Blaze.Html.Renderer.Pretty
+import Text.Blaze.Html.Renderer.String
 
 main :: IO ()
 main = do
