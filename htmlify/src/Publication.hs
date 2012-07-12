@@ -2,12 +2,19 @@ module Publication
 ( PubType (..)
 , Publication (..)
 , parsePublications
+, publicationToHtml
+, publicationsToHtml
 ) where
 
 import Text.BibTeX.Entry
 import Text.BibTeX.Parse
 import Text.Parsec.Prim
+import Text.LaTeX.Character (toUnicodeString)
+import Text.Blaze.Html5 (Html, toHtml)
+import qualified Text.Blaze.Html5 as H
+import qualified Text.Blaze.Html5.Attributes as A
 import Data.Char (toLower)
+import Data.List (intercalate)
 
 data PubType = Conference 
              | Journal 
@@ -39,7 +46,7 @@ bibPubType e = case map toLower (entryType e) of
 
 bibField :: String -> T -> String
 bibField k e = case lookup k (fields (lowerCaseFieldNames e)) of
-  Just v -> v
+  Just v -> toUnicodeString v
   Nothing -> error $ "No field named '" ++ k ++ "'"
 
 bibAuthors :: T -> [String]
@@ -62,3 +69,23 @@ parsePublications :: String -> [Publication]
 parsePublications s = case parse (skippingLeadingSpace file) "BibTeX" s of
   Left err -> error (show err)
   Right bibs -> map bibToPub bibs
+
+fullStop :: String -> String
+fullStop s = s ++ "."
+
+htmlTitle :: String -> Html
+htmlTitle = H.i . toHtml . fullStop
+
+htmlAuthors :: [String] -> Html
+htmlAuthors = toHtml . fullStop . intercalate ", "
+
+publicationToHtml :: Publication -> Html
+publicationToHtml (Publication _ ti au yr _ _ _ _) = do
+  htmlAuthors au
+  htmlTitle ti
+  toHtml (fullStop yr)
+
+publicationsToHtml :: [Publication] -> Html
+publicationsToHtml ps = do
+  H.ul $ mapM_ (H.li . publicationToHtml) ps
+
