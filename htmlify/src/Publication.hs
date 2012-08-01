@@ -81,16 +81,15 @@ htmlProceedings :: String -> String -> Html
 htmlProceedings pb sr = toHtml (fullStop conf)
   where conf = "In " ++ pb ++ " (" ++ sr ++ ")"
 
-htmlAbstract :: String -> Html
-htmlAbstract = H.blockquote  . toHtml
+--htmlAbstract :: String -> Html
+--htmlAbstract = H.blockquote  . toHtml
 
 publicationToHtml :: Publication -> Html
-publicationToHtml (Publication Conference ti au yr pb sr ab _ _) = do
+publicationToHtml (Publication Conference ti au yr pb sr _ _ _) = do
   htmlAuthors au
   htmlTitle ti
   toHtml (fullStop yr)
   htmlProceedings pb sr
-  htmlAbstract ab
 publicationToHtml _ = error "Unsupported publication type"
 
 publicationsToHtml :: [Publication] -> Html
